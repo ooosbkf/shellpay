@@ -9,10 +9,10 @@ import (
 
 var (
 	// MasterKey - the HMAC private key required for request signing
-	MasterKey         string
-	dbUser, dbPwd     string
-	hostURI, hostPort string
-	userDB            *sql.DB
+	MasterKey             string
+	dbUser, dbPwd, dbName string
+	hostURI, hostPort     string
+	userDB                *sql.DB
 )
 
 func init() {
@@ -25,8 +25,11 @@ func init() {
 	if dbPwd = os.Getenv("DB_PWD"); dbPwd == "" {
 		panic("Set the DB_PWD env variable")
 	}
+	if dbName = os.Getenv("DB_NAME"); dbName == "" {
+		panic("Set the DB_NAME env variable")
+	}
 
-	userDB, err = sql.Open("postgres", "postgres://"+dbUser+":"+dbPwd+"@localhost/userdb?sslmode=disable")
+	userDB, err = sql.Open("postgres", "postgres://"+dbUser+":"+dbPwd+"@localhost/"+dbName+"?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
